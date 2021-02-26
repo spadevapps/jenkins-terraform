@@ -9,7 +9,7 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_deployment" "flaskapp" {
   metadata {
     name = "flaskapp"
     labels = {
