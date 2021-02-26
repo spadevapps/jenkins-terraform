@@ -9,15 +9,31 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
+resource "kubernetes_namespace" "flaskapp" {
+  metadata {
+    annotations = {
+      name = "flaskapp"
+    }
+
+    labels = {
+      App = "ScalableNginxExample"
+    }
+
+    name = "flaskapp"
+  }
+}
+
+
 resource "kubernetes_deployment" "flaskapp" {
   metadata {
-    name = "flaskapp"
+    namespace = kubernetes_namespace.flaskapp.metadata.0.name
+    name      = "flaskapp"
     labels = {
       App = "flaskapp"
     }
   }
   spec {
-    replicas =4
+    replicas = 10
     selector {
       match_labels = {
         App = "flaskapp"
@@ -31,33 +47,30 @@ resource "kubernetes_deployment" "flaskapp" {
       }
       spec {
         container {
-          image = "spadevapps/sba.kubernetes-cluster"
-          name  = "flaskapp"
+          image = "spadevapps/sba.kubernetes-cluster:latest"
+          name  = "example"
           port {
             container_port = 80
           }
-          resources {
-            limits = {
-              cpu    = "0.5"
-              memory = "512Mi"
-            }
-            requests = {
-              cpu    = "250m"
-              memory = "128Mi"
-            }
-          }
+        
         }
       }
     }
   }
+  timeouts {
+    create = "1m"
+    update = "1m"
+    delete = "2m"
+  }
 }
 resource "kubernetes_service" "flaskapp" {
   metadata {
-    name = "flaskapp"
+    namespace = kubernetes_namespace.flaskapp.metadata.0.name
+    name      = "flaskapp"
   }
   spec {
     selector = {
-      App = kubernetes_deployment.flaskapp.0.template.0.metadata[0].labels.App
+      App = kubernetes_deployment.flaskapp.spec.0.template.0.metadata[0].labels.App
     }
     port {
       node_port   = 30201
