@@ -33,7 +33,7 @@ resource "kubernetes_deployment" "flaskapp" {
     }
   }
   spec {
-    replicas = 10
+    replicas = 4
     selector {
       match_labels = {
         App = "flaskapp"
