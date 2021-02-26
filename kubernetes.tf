@@ -6,7 +6,7 @@ terraform {
   }
 }
 provider "kubernetes" {
-  config_path = "/bin/.kube/config"
+  config_path = "/home/ansiblem/.kube/config"
 }
 
 resource "kubernetes_namespace" "flaskapp" {
