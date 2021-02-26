@@ -34,7 +34,7 @@ resource "kubernetes_deployment" "nginx" {
           image = "spadevapps/sba.kubernetes-cluster"
           name  = "flaskapp"
           port {
-            container_port = 5000
+            container_port = 80
           }
           resources {
             limits = {
@@ -60,9 +60,9 @@ resource "kubernetes_service" "flaskapp" {
       App = kubernetes_deployment.flaskapp.0.template.0.metadata[0].labels.App
     }
     port {
-      node_port   = 30202
-      port        = 5000
-      target_port = 5000
+      node_port   = 30201
+      port        = 80
+      target_port = 80
     }
     type = "NodePort"
   }

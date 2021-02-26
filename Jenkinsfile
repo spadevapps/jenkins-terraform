@@ -6,14 +6,14 @@ pipeline {
     }
 
     stages {
-        stage('Clean up') {
+        stage('rm folder') {
 			steps {
 				script {
 					sh 'rm -rf jenkins-terraform'
 				}
 			}
 		}
-        stage('fetch_latest_code') {
+        stage('clone repo') {
             steps {
                 script{
                     sh 'git clone https://github.com/spadevapps/jenkins-terraform.git'
@@ -21,27 +21,26 @@ pipeline {
             }
         }
 
-        stage('TF Init&Plan') {
+        stage('start terraform') {
             steps {
                 script {
-                    sh '/usr/local/bin/terraform init'
-               //   sh '/usr/local/bin/terraform plan'
+                    sh '/bin/terraform init'
                 }             
             }      
         }
 
-        stage('TF Apply') {
+        stage('apply terraform') {
             steps {
                 script {
-                    sh '/usr/local/bin/terraform apply -input=false -auto-approve'
+                    sh '/bin/terraform apply -input=false -auto-approve'
                 }
             }
         }
         
-        stage('Show namespaces') {
+        stage('get pods') {
             steps {
                 script {
-                    sh '/usr/local/bin/kubectl get all --all-namespaces'
+                    sh '/bin/kubectl get all --all-namespaces'
                 }
             }
         }
