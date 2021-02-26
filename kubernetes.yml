@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sba-svc
+  labels:
+    app: sba-flask-app
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 32000
+  selector:
+    app: sba-flask-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sba-deployment
+  labels:
+    app: sba-flask-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sba-flask-app
+  template:
+    metadata:
+      labels:
+        app: sba-flask-app
+    spec:
+      containers:
+      - name: sba-flask-app
+        image: spadevapps/sba.kubernetes-cluster
+        ports:
+        - containerPort: 8080
