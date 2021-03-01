@@ -1,4 +1,3 @@
-
 pipeline {
     agent {
         node {
@@ -6,10 +5,11 @@ pipeline {
         } 
     }
 
-    stages {
         stage('clone repo') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/spadevapps/jenkins-terraform.git']]])
+                script{
+                    sh 'git clone https://github.com/spadevapps/jenkins-terraform.git'
+                }
             }
         }
 
@@ -24,7 +24,7 @@ pipeline {
         stage('apply terraform') {
             steps {
                 script {
-                    sh '/bin/terraform apply -auto-approve'
+                    sh '/bin/terraform apply -input=false -auto-approve'
                 }
             }
         }

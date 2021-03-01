@@ -58,9 +58,9 @@ resource "kubernetes_deployment" "flaskapp" {
     }
   }
   timeouts {
-    create = "1m"
-    update = "1m"
-    delete = "2m"
+    create = "3m"
+    update = "3m"
+    delete = "3m"
   }
 }
 resource "kubernetes_service" "flaskapp" {
