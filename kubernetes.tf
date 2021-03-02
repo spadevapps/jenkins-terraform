@@ -47,7 +47,7 @@ resource "kubernetes_deployment" "flaskapp" {
       }
       spec {
         container {
-          image = "spadevapps/sba.kubernetes-cluster:latest"
+          image = "tomkugelman/capstone-flask:latest"
           name  = "example"
           port {
             container_port = 80
